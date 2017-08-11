@@ -31,7 +31,7 @@ namespace Comp123_S2017_CalculatorApp
         /// <param name="e"></param>
         private void CalculatorForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-
+            Application.Exit();// terminate the application
         }
     }
 }
