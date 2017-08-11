@@ -8,11 +8,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+/*
+ * Name: Khim Tang
+ * StudentID: 300920672
+ * Date: August 10. 2017
+ * Description: Calculator Demo project 
+ * Version: 0.1 - Project was Created
+*/
+
 namespace Comp123_S2017_CalculatorApp
 {
-    public partial class Form1 : Form
+    public partial class CalculatorForm : Form
     {
-        public Form1()
+        public CalculatorForm()
         {
             InitializeComponent();
         }
