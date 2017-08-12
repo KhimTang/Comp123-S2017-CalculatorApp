@@ -14,7 +14,7 @@ using System.Windows.Forms;
  * StudentID: 300920672
  * Date: August 10. 2017
  * Description: Calculator Demo project 
- * Version: 0.5 - Added the Form "Load" event handler  
+ * Version: 0.6 - Added the private _clear method  
 */
 
 namespace Comp123_S2017_CalculatorApp
@@ -56,10 +56,15 @@ namespace Comp123_S2017_CalculatorApp
         {
             Button calculatorButton = sender as Button; // this is call downcasting
 
-            if ((calculatorButton.Text == ".") && (this.IsDecimalClicked))
+            if ((this.IsDecimalClicked) && (calculatorButton.Text == "."))
             {               
                     return;                
             }
+            if (calculatorButton.Text == ".")
+            {
+                this.IsDecimalClicked = true;
+            }
+
             ResultTextBox.Text += calculatorButton.Text;
 
            // Debug.WriteLine("A Calculator Button was Clicked");//This must include a class by picking using System.Diagnostics;
@@ -73,7 +78,20 @@ namespace Comp123_S2017_CalculatorApp
         {
             Button operatorButton = sender as Button; // This is downcasting
 
+            switch (operatorButton.Text)
+            {
+                case "C":
+                    this._clear();
+                    break;
+            }
 
+        }
+        /// <summary>
+        /// This is the private _clear method. It resets / clears the calculator.
+        /// </summary>
+        private void _clear()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
