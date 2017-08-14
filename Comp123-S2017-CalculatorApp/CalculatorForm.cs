@@ -65,7 +65,25 @@ namespace Comp123_S2017_CalculatorApp
                 this.IsDecimalClicked = true;
             }
 
-            ResultTextBox.Text += calculatorButton.Text;
+            if (ResultTextBox.Text == "0")
+            {
+                if (calculatorButton.Text ==".")
+                {
+                    ResultTextBox.Text += calculatorButton.Text;
+                }
+                else
+                {
+                    ResultTextBox.Text = calculatorButton.Text;
+                }
+
+            }
+            else
+            {
+                ResultTextBox.Text += calculatorButton.Text;
+            }
+            
+
+            
 
            // Debug.WriteLine("A Calculator Button was Clicked");//This must include a class by picking using System.Diagnostics;
         }
@@ -91,7 +109,8 @@ namespace Comp123_S2017_CalculatorApp
         /// </summary>
         private void _clear()
         {
-            throw new NotImplementedException();
+            this.IsDecimalClicked = false;
+            ResultTextBox.Text = "0";
         }
 
         /// <summary>
@@ -102,7 +121,7 @@ namespace Comp123_S2017_CalculatorApp
 
         private void CalculatorForm_Load(object sender, EventArgs e)
         {
-            this.IsDecimalClicked = false;
+            this._clear();
         }
     }
 }
