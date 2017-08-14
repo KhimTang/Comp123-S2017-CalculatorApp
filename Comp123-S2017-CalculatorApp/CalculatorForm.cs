@@ -14,7 +14,7 @@ using System.Windows.Forms;
  * StudentID: 300920672
  * Date: August 10. 2017
  * Description: Calculator Demo project 
- * Version: 1.1 - Added the _showResult method
+ * Version: 1.2 - Fixed bug in CalculatorButton_Click
 */
 
 namespace Comp123_S2017_CalculatorApp
@@ -26,13 +26,15 @@ namespace Comp123_S2017_CalculatorApp
         private string _currentOperator;
         private List<double> _operandList;
         private double _result;
+        private bool _isOperandTwo;
 
         // PUBLIC PROPERTIES
 
         public bool IsDecimalClicked { get { return this._isDecimalClicked; } set { this._isDecimalClicked = value; } }
-        public string CurrentOperator { get { return this._currentOperator; } set {this._currentOperator=value; } }
-        public List<double> OperandList { get {return this._operandList; } set {this._operandList=value; } }
-        public double Result { get { return this._result; } set {this._result=value; } }
+        public string CurrentOperator { get { return this._currentOperator; } set { this._currentOperator = value; } }
+        public List<double> OperandList { get { return this._operandList; } set { this._operandList = value; } }
+        public double Result { get { return this._result; } set { this._result = value; } }
+        public bool IsOperandTwo { get { return this._isOperandTwo; } set {this._isOperandTwo=value; } }
 
         // CONSTRUCTORS
 
@@ -63,8 +65,8 @@ namespace Comp123_S2017_CalculatorApp
             Button calculatorButton = sender as Button; // this is call downcasting
 
             if ((this.IsDecimalClicked) && (calculatorButton.Text == "."))
-            {               
-                    return;                
+            {
+                return;
             }
             if (calculatorButton.Text == ".")
             {
@@ -73,7 +75,7 @@ namespace Comp123_S2017_CalculatorApp
 
             if (ResultTextBox.Text == "0")
             {
-                if (calculatorButton.Text ==".")
+                if (calculatorButton.Text == ".")
                 {
                     ResultTextBox.Text += calculatorButton.Text;
                 }
@@ -85,13 +87,20 @@ namespace Comp123_S2017_CalculatorApp
             }
             else
             {
-                ResultTextBox.Text += calculatorButton.Text;
+                if ((OperandList.Count > 0) && (this._isOperandTwo == false))
+                {
+
+                    ResultTextBox.Text = calculatorButton.Text;
+                    this._isOperandTwo = true;
+                }
+
+                else
+                {
+                    ResultTextBox.Text += calculatorButton.Text;
+                }
             }
-            
 
-            
-
-           // Debug.WriteLine("A Calculator Button was Clicked");//This must include a class by picking using System.Diagnostics;
+            // Debug.WriteLine("A Calculator Button was Clicked");//This must include a class by picking using System.Diagnostics;
         }
         /// <summary>
         /// This is a shared event handler for the Operator Buttons of the caculator
@@ -108,7 +117,7 @@ namespace Comp123_S2017_CalculatorApp
             {
                 case "C":
                     this._clear();
-                    break;               
+                    break;
 
                 case "=":
                     this._showResult(operand);
@@ -132,6 +141,7 @@ namespace Comp123_S2017_CalculatorApp
         {
             this._calculator(operand, this.CurrentOperator);
             ResultTextBox.Text = this.Result.ToString();
+
         }
 
         /// <summary>
@@ -142,22 +152,26 @@ namespace Comp123_S2017_CalculatorApp
 
         private void _calculator(double operand, string operatorString)
         {
-            
+
             OperandList.Add(operand);
             if (OperandList.Count > 1)
             {
-                switch(operatorString)
+                switch (operatorString)
                 {
                     case "+":
                         this.Result = this.OperandList[0] + this.OperandList[1];
+
                         break;
                     case "-":
                         this.Result = this.OperandList[0] - this.OperandList[1];
                         break;
                 }
+                this.OperandList.Clear();
+                this.OperandList.Add(this.Result);
+                this.IsOperandTwo = false;
             }
 
-            this.CurrentOperator = operatorString;           
+            this.CurrentOperator = operatorString;
         }
         /// <summary>
         /// This method converts the string from the ResultTextBox to a number
@@ -178,7 +192,7 @@ namespace Comp123_S2017_CalculatorApp
 
             }
             return 0;
-           
+
         }
 
         /// <summary>
@@ -190,6 +204,8 @@ namespace Comp123_S2017_CalculatorApp
             ResultTextBox.Text = "0";
             this.CurrentOperator = "C";
             this.OperandList = new List<double>();
+            this.IsOperandTwo = false;
+            this.Result = 0;
         }
 
         /// <summary>
