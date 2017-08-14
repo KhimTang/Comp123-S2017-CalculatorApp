@@ -14,7 +14,7 @@ using System.Windows.Forms;
  * StudentID: 300920672
  * Date: August 10. 2017
  * Description: Calculator Demo project 
- * Version: 1.0 - Added the _calculate and _convertOperand Methods
+ * Version: 1.1 - Added the _showResult method
 */
 
 namespace Comp123_S2017_CalculatorApp
@@ -25,12 +25,14 @@ namespace Comp123_S2017_CalculatorApp
         private bool _isDecimalClicked;// must have the properties
         private string _currentOperator;
         private List<double> _operandList;
+        private double _result;
 
         // PUBLIC PROPERTIES
 
         public bool IsDecimalClicked { get { return this._isDecimalClicked; } set { this._isDecimalClicked = value; } }
         public string CurrentOperator { get { return this._currentOperator; } set {this._currentOperator=value; } }
         public List<double> OperandList { get {return this._operandList; } set {this._operandList=value; } }
+        public double Result { get { return this._result; } set {this._result=value; } }
 
         // CONSTRUCTORS
 
@@ -98,7 +100,9 @@ namespace Comp123_S2017_CalculatorApp
         /// <param name="e"></param>
         private void OperatorButton_Click(object sender, EventArgs e)
         {
+
             Button operatorButton = sender as Button; // This is downcasting
+            double operand = this._convertOperand(ResultTextBox.Text);// convert to number
 
             switch (operatorButton.Text)
             {
@@ -107,27 +111,53 @@ namespace Comp123_S2017_CalculatorApp
                     break;               
 
                 case "=":
+                    this._showResult(operand);
                     break;
                 case "⌫":
                     break;
                 case "±":
                     break;
                 default:
-                    this._calculator(ResultTextBox.Text, operatorButton.Text);
+                    this._calculator(operand, operatorButton.Text);
                     break;
 
             }
 
         }
         /// <summary>
+        /// This method shows the Result of the last operation in the ResultTextBox
+        /// </summary>
+        /// <param name="text"></param>
+        private void _showResult(double operand)
+        {
+            this._calculator(operand, this.CurrentOperator);
+            ResultTextBox.Text = this.Result.ToString();
+        }
+
+        /// <summary>
         /// This method calculates the result of all the operands in the OperandList
         /// </summary>
         /// <param name="text1"></param>
         /// <param name="text2"></param>
 
-        private void _calculator(string operandString, string operatorString)
+        private void _calculator(double operand, string operatorString)
         {
-            double operand = this._convertOperand(operandString);           
+            
+            OperandList.Add(operand);
+            if (OperandList.Count > 1)
+            {
+                switch(operatorString)
+                {
+                    case "+":
+                        this.Result = this.OperandList[0] + this.OperandList[1];
+                        break;
+                    case "-":
+                        this.Result = this.OperandList[0] - this.OperandList[1];
+                        break;
+                }
+            }
+
+            this.CurrentOperator = operatorString;           
         }
         /// <summary>
         /// This method converts the string from the ResultTextBox to a number
